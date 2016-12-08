@@ -56,6 +56,10 @@ class RouteListCommand extends Command
             $this->warn('No routes found!');
             return false;
         }
+        //change the reverse order if command contains reverse command
+        if ($this->option('reverse')) {
+            rsort($this->routes);
+        }
         $this->info("Route found: " . count($this->routes));
         $this->table($headers, $this->routes);
     }
@@ -160,7 +164,7 @@ class RouteListCommand extends Command
     {
         return [
             ['filter', 'f', InputOption::VALUE_OPTIONAL, 'filter'],
-//            ['reverse', 'me', InputOption::VALUE_OPTIONAL, 'Method'],
+            ['reverse', 'me', InputOption::VALUE_NONE, 'Method'],
         ];
     }
 }
