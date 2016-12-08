@@ -3,6 +3,7 @@
 namespace Thedevsaddam\LumenRouteList\Console\Commands;
 
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Input\InputOption;
 
 
 class RouteListCommand extends Command
@@ -12,7 +13,7 @@ class RouteListCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'route:list';
+    protected $name = 'route:list';
 
     /**
      * The console command description.
@@ -42,11 +43,15 @@ class RouteListCommand extends Command
         return;
     }
 
-
+    /**
+     * Display the routes in console
+     * @return bool
+     */
     public function displayRoutes()
     {
         $headers = ['Method', 'URI', 'Name', 'Action', 'Middleware', 'Map To'];
         $this->generateRoutes();
+        $this->applyFilters();
         if (!$this->routes) {
             $this->warn('You don\'t have any routes!');
             return false;
@@ -62,14 +67,33 @@ class RouteListCommand extends Command
     {
         foreach (app()->getRoutes() as $route) {
             array_push($this->routes, [
-                $route['method'],
-                $route['uri'],
-                $this->getRouteName($route),
-                $this->getRouteAction($route),
-                $this->getRouteMiddleware($route),
-                $this->getRouteMapTo($route)
+                'method' => $route['method'],
+                'uri' => $route['uri'],
+                'name' => $this->getRouteName($route),
+                'action' => $this->getRouteAction($route),
+                'middleware' => $this->getRouteMiddleware($route),
+                'map' => $this->getRouteMapTo($route)
             ]);
         }
+    }
+
+    /**
+     * Apply filters on routes if user provide
+     */
+    private function applyFilters()
+    {
+        $availableOptions = ['name', 'method', 'uri', 'action', 'middleware'];
+        $routes = $this->routes;
+        foreach ($this->options() as $key => $option) {
+            if (in_array($key, $availableOptions) && null != $option) {
+                foreach ($routes as $index => $route) {
+                    if (strtolower($route[$key]) == strtolower($option)) {
+                        array_push($routes, $routes[$index]);
+                    }
+                }
+            }
+        }
+        $this->routes = $routes;
     }
 
     /**
@@ -125,4 +149,19 @@ class RouteListCommand extends Command
         return !isset($route['action']['uses']);
     }
 
+    /**
+     * Get console input options
+     * @return array
+     */
+    protected function getOptions()
+    {
+        return [
+            ['method', 'me', InputOption::VALUE_OPTIONAL, 'Method'],
+            ['uri', 'ur', InputOption::VALUE_OPTIONAL, 'Uri'],
+            ['name', 'na', InputOption::VALUE_OPTIONAL, 'Name'],
+            ['action', 'ac', InputOption::VALUE_OPTIONAL, 'Action'],
+            ['middleware', 'mw', InputOption::VALUE_OPTIONAL, 'Middleware'],
+            ['map', 'mp', InputOption::VALUE_OPTIONAL, 'Map to']
+        ];
+    }
 }
