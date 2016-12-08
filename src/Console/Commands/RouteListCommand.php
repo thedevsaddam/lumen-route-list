@@ -53,10 +53,10 @@ class RouteListCommand extends Command
         $this->generateRoutes();
         $this->applyFilters();
         if (!$this->routes) {
-            $this->warn('You don\'t have any routes!');
+            $this->warn('No routes found!');
             return false;
         }
-        $this->info("Total Route found: " . count($this->routes));
+        $this->info("Route found: " . count($this->routes));
         $this->table($headers, $this->routes);
     }
 
@@ -84,18 +84,18 @@ class RouteListCommand extends Command
     private function applyFilters()
     {
         $availableOptions = ['name', 'method', 'uri', 'action', 'middleware'];
-        foreach ($this->options() as $key => $option) {
-            $routes = $this->routes;
-            if (in_array($key, $availableOptions) && null != $option) {
-                foreach ($routes as $index => $route) {
-                    if (strtolower($route[$key]) == strtolower($option)) {
-                        array_push($this->routes, $routes[$index]);
-                        $routes = $this->routes;
-                        $this->routes = [];
-                    }
-                }
+        $input = $this->option('filter');
+        if (!str_contains($input, ':')) {
+            return false;
+        }
+        $input = explode(':', $input);
+        $routes = $this->routes;
+        $this->routes = [];
+        if (in_array($input[0], $availableOptions) && null != $input[1]) {
+            foreach ($routes as $index => $route) {
+                if (str_contains(strtolower($route[$input[0]]), strtolower($input[1])))
+                    $this->routes[] = $route;
             }
-            $this->routes = $routes;
         }
     }
 
@@ -159,12 +159,8 @@ class RouteListCommand extends Command
     protected function getOptions()
     {
         return [
-            ['method', 'me', InputOption::VALUE_OPTIONAL, 'Method'],
-            ['uri', 'ur', InputOption::VALUE_OPTIONAL, 'Uri'],
-            ['name', 'na', InputOption::VALUE_OPTIONAL, 'Name'],
-            ['action', 'ac', InputOption::VALUE_OPTIONAL, 'Action'],
-            ['middleware', 'mw', InputOption::VALUE_OPTIONAL, 'Middleware'],
-            ['map', 'mp', InputOption::VALUE_OPTIONAL, 'Map to']
+            ['filter', 'f', InputOption::VALUE_OPTIONAL, 'filter'],
+//            ['reverse', 'me', InputOption::VALUE_OPTIONAL, 'Method'],
         ];
     }
 }
