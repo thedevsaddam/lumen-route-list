@@ -1,0 +1,29 @@
+{
+    "name": "thedevsaddam/lumen-route-list",
+    "description": "Display all the registered route list like laravel",
+    "type": "package",
+    "keywords": [
+        "thedevsaddam",
+        "lumen",
+        "lumen-route-list",
+        "route-list",
+        "routes",
+        "lumen routes list"
+    ],
+    "homepage": "https://github.com/thedevsaddam/lumen-route-list",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Saddam Hossain",
+            "email": "thedevsaddam@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Thedevsaddam\\LumenRouteList\\":"src"
+        }
+    }
+}
