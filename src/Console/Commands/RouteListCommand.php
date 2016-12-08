@@ -56,6 +56,7 @@ class RouteListCommand extends Command
             $this->warn('You don\'t have any routes!');
             return false;
         }
+        $this->info("Total Route found: " . count($this->routes));
         $this->table($headers, $this->routes);
     }
 
@@ -83,17 +84,19 @@ class RouteListCommand extends Command
     private function applyFilters()
     {
         $availableOptions = ['name', 'method', 'uri', 'action', 'middleware'];
-        $routes = $this->routes;
         foreach ($this->options() as $key => $option) {
+            $routes = $this->routes;
             if (in_array($key, $availableOptions) && null != $option) {
                 foreach ($routes as $index => $route) {
                     if (strtolower($route[$key]) == strtolower($option)) {
-                        array_push($routes, $routes[$index]);
+                        array_push($this->routes, $routes[$index]);
+                        $routes = $this->routes;
+                        $this->routes = [];
                     }
                 }
             }
+            $this->routes = $routes;
         }
-        $this->routes = $routes;
     }
 
     /**
