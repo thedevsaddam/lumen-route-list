@@ -32,13 +32,22 @@ $app->register(\Thedevsaddam\LumenRouteList\LumenRouteListServiceProvider::class
 
 ### **Uses**
 1. Run `php artisan route:list` to display the route list
+1. Inorder to filter routes use `php artisan route:list --filter=tableHeaderName:searchKeyword`
+1. To display in reverse order use `--reverse`
+
+Filtering example given below:
+```bash
+php artisan route:list --filter=method:post
+#The above example will filter all the routes with post method#
+or
+php artisan route:list --filter=name:user
+#The above example will filter all the routes which name contains *user* keyword#
+or to display in reverse order use
+php artisan route:list --filter=name:user --reverse
+```
 
 ![route list like laravel](https://raw.githubusercontent.com/thedevsaddam/lumen-route-list/master/screenshots/route-list.png)
 
-### **Todo**
-* Filtering routes
-* Code refactor
-<hr/>
 
 ### **License**
 The **lumen-route-list** is a open-source software licensed under the [MIT License](LICENSE.md).
