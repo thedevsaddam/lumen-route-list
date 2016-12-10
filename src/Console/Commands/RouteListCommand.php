@@ -164,7 +164,7 @@ class RouteListCommand extends Command
     {
         return [
             ['filter', 'f', InputOption::VALUE_OPTIONAL, 'filter'],
-            ['reverse', 'me', InputOption::VALUE_NONE, 'Method'],
+            ['reverse', 'r', InputOption::VALUE_NONE, 'r'],
         ];
     }
 }
