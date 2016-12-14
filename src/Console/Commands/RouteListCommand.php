@@ -166,7 +166,7 @@ class RouteListCommand extends Command
             ['action', 'action', InputOption::VALUE_OPTIONAL, 'Action'],
             ['middleware', 'middleware', InputOption::VALUE_OPTIONAL, 'Middleware'],
             ['map', 'map', InputOption::VALUE_OPTIONAL, 'Map to'],
-            ['reverse', 'r', InputOption::VALUE_OPTIONAL, 'Reverse route list']
+            ['reverse', 'r', InputOption::VALUE_NONE, 'Reverse route list']
         ];
     }
 }
