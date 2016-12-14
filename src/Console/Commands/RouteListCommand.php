@@ -60,7 +60,7 @@ class RouteListCommand extends Command
         $str = '';
         if ($this->option('reverse')) {
             rsort($this->routes);
-            $str = '. Displayed in reversed order';
+            $str = '. Displayed in reverse order';
         }
         $this->info("Route found: " . count($this->routes) . $str);
         $this->table($headers, $this->routes);
