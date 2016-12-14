@@ -57,10 +57,12 @@ class RouteListCommand extends Command
             return false;
         }
         //change the reverse order if command contains reverse command
+        $str = '';
         if ($this->option('reverse')) {
             rsort($this->routes);
+            $str = '. Displayed in reversed order';
         }
-        $this->info("Route found: " . count($this->routes));
+        $this->info("Route found: " . count($this->routes) . $str);
         $this->table($headers, $this->routes);
     }
 
@@ -88,17 +90,12 @@ class RouteListCommand extends Command
     private function applyFilters()
     {
         $availableOptions = ['name', 'method', 'uri', 'action', 'middleware'];
-        $input = $this->option('filter');
-        if (!str_contains($input, ':')) {
-            return false;
-        }
-        $input = explode(':', $input);
-        $routes = $this->routes;
-        $this->routes = [];
-        if (in_array($input[0], $availableOptions) && null != $input[1]) {
-            foreach ($routes as $index => $route) {
-                if (str_contains(strtolower($route[$input[0]]), strtolower($input[1])))
-                    $this->routes[] = $route;
+        foreach ($this->options() as $key => $option) {
+            if (in_array($key, $availableOptions) && null != $option) {
+                foreach ($this->routes as $index => $route) {
+                    if (!str_contains(strtolower($route[$key]), strtolower($option)))
+                        unset($this->routes[$index]);
+                }
             }
         }
     }
@@ -163,8 +160,13 @@ class RouteListCommand extends Command
     protected function getOptions()
     {
         return [
-            ['filter', 'f', InputOption::VALUE_OPTIONAL, 'filter'],
-            ['reverse', 'r', InputOption::VALUE_NONE, 'r'],
+            ['method', 'method', InputOption::VALUE_OPTIONAL, 'Method'],
+            ['uri', 'uri', InputOption::VALUE_OPTIONAL, 'Uri'],
+            ['name', 'name', InputOption::VALUE_OPTIONAL, 'Name'],
+            ['action', 'action', InputOption::VALUE_OPTIONAL, 'Action'],
+            ['middleware', 'middleware', InputOption::VALUE_OPTIONAL, 'Middleware'],
+            ['map', 'map', InputOption::VALUE_OPTIONAL, 'Map to'],
+            ['reverse', 'r', InputOption::VALUE_OPTIONAL, 'Reverse route list']
         ];
     }
 }
