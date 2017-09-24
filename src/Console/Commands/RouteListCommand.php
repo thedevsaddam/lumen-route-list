@@ -72,7 +72,8 @@ class RouteListCommand extends Command
      */
     public function generateRoutes()
     {
-        foreach (app()->getRoutes() as $route) {
+        $routes = property_exists(app(), 'router')? app()->router->getRoutes() : app()->getRoutes();
+        foreach ($routes as $route) {
             array_push($this->routes, [
                 'method' => $route['method'],
                 'uri' => $route['uri'],
