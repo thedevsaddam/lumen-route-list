@@ -4,6 +4,7 @@ Lumen Route List
 
 This package will help to display all the registered route list like laravel.
 
+#### This package is no longer maintained :( use this package [appzcoder/lumen-route-list](https://github.com/appzcoder/lumen-route-list)
 
 ----------
 
